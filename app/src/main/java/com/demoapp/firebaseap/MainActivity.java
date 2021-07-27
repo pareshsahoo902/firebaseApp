@@ -11,6 +11,8 @@ import com.demoapp.firebaseap.Authentication.LoginActivity;
 import com.demoapp.firebaseap.Authentication.RegisterActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
+//ProfileScreen
+
 public class MainActivity extends AppCompatActivity {
     Button logoout;
     FirebaseAuth auth;

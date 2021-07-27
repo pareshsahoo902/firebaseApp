@@ -11,8 +11,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.demoapp.firebaseap.ChatScreen.ChatActivity;
+import com.demoapp.firebaseap.ChatScreen.ChatScreenModel;
+import com.demoapp.firebaseap.ChatScreen.ChatViewHolder;
 import com.demoapp.firebaseap.MainActivity;
 import com.demoapp.firebaseap.R;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -27,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth auth;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
 //        FirebaseApp.initializeApp(getApplicationContext());
         auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null){
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            startActivity(new Intent(LoginActivity.this, ChatActivity.class));
 
         }
 
@@ -76,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             //Save name and phone number with email in the DB if registered
 
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            startActivity(new Intent(LoginActivity.this, ChatActivity.class));
                         }
                     }
                 });

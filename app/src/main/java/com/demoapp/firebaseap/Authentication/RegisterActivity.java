@@ -10,18 +10,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.demoapp.firebaseap.ChatScreen.ChatActivity;
 import com.demoapp.firebaseap.MainActivity;
 import com.demoapp.firebaseap.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
 
     EditText name, phone, email, password, confirmPassword;
     Button register;
     FirebaseAuth auth;
+    DatabaseReference userRef;
+
+
 
 
     @Override
@@ -37,6 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
         register = findViewById(R.id.register);
         auth = FirebaseAuth.getInstance();
 
+        userRef = FirebaseDatabase.getInstance().getReference().child("users");
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,10 +68,29 @@ public class RegisterActivity extends AppCompatActivity {
                         if (!task.isSuccessful()){
                             Toast.makeText(RegisterActivity.this, "Failed!"+task.getException(), Toast.LENGTH_SHORT).show();
                         }else{
-
                             //Save name and phone number with email in the DB if registered
+                            String uid  =   auth.getCurrentUser().getUid();
+                            HashMap<String,Object> userMap =new HashMap<>();
+                            userMap.put("name",name.getText().toString());
+                            userMap.put("phone",phone.getText().toString());
+                            userMap.put("email",email.getText().toString());
+                            userMap.put("id",uid);
 
-                            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                            userRef.child(uid).updateChildren(userMap)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull  Task<Void> task) {
+                                            if (task.isSuccessful()){
+                                                startActivity(new Intent(RegisterActivity.this, ChatActivity.class));
+
+                                            }else{
+                                                Toast.makeText(RegisterActivity.this, "Internet is not Connected!", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+
+
+                           
                         }
                     }
                 });
